@@ -1,13 +1,34 @@
-Yet another live announcement bot
+# Yet another live announcement bot
 
-Supports twitch and trovo
+## API Support
+- twitch
+- trovo
+- others can be requested by messaging me on discord (HypnoSprite#4131) or by posting an issue
 
-run /setup to get started
+## Basic Instructions
+```/setup``` to get started
 
-use /watcher add to add a stream, the platform value is a comma separated list of platforms
+```/watcher add``` to add a stream, the platform value is a comma separated list of platforms
 
-use /watcher remove to remove a stream
+```/watcher remove``` to remove a stream
 
-Hosted privately, If you would like to host your own version you must provide api keys for all of platforms (including discord ofc)
+```/edit``` to make minor changes to the server configuration
 
-By default the bot adds a delay of 1 to 5 minutes between all of the api calls
+NOTE: ```/edit``` does not support changing the streamer info
+  unfortunately this means you'll need to delete and re-add the streamer in question
+
+## Hosting
+
+A version of this bot is hosted for public use
+If you would like to host your own version you must provide api keys for all of platforms (including discord ofc)
+
+
+### Hosting Setup
+- .env file for credentials
+- watcher.json for storage
+- bot.log for logs
+- npm
+- node 19
+- discord token
+- trovo api id/secret pair
+- twitch api id/secret pair
