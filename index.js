@@ -60,9 +60,9 @@ async function getStream(streamer, guild) {
 					.setDescription(stream.title)
 					.setThumbnail(user.profilePictureUrl)
 				if (liveRole == null) {
-					liveChannel.send(user.displayName + " is live with " + stream.viewers + " playing " + stream.gameName);
+					liveChannel.send(user.displayName + " is live playing " + stream.gameName);
 				} else {
-					liveChannel.send("<@&" + liveRole + "> " + user.displayName + " is live with " + stream.viewers + " playing " + stream.gameName);
+					liveChannel.send("<@&" + liveRole + "> " + user.displayName + " is live playing " + stream.gameName);
 				}
 				liveChannel.send({ embeds: [embed] })
 				streamer["checked"] = true
@@ -83,9 +83,9 @@ async function getStream(streamer, guild) {
 					.setDescription(channel.live_title)
 					.setThumbnail(channel.profile_pic)
 				if (liveRole == null) {
-					liveChannel.send(channel.username + " is live with " + channel.current_viewers + " playing " + channel.category_name);
+					liveChannel.send(channel.username + " is live playing " + channel.category_name);
 				} else {
-					liveChannel.send("<@&" + liveRole + "> " + channel.username + " is live with " + channel.current_viewers + " playing " + channel.category_name);
+					liveChannel.send("<@&" + liveRole + "> " + channel.username + " is live playing " + channel.category_name);
 				}
 				liveChannel.send({ embeds: [embed] })
 
