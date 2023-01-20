@@ -1,0 +1,23 @@
+{
+  "name": "heresybot",
+  "version": "1.0.0",
+  "description": "General Purpose Discord Bot",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "HypnoSprite#4131",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/voice": "^0.14.0",
+    "axios": "^1.2.2",
+    "big-integer": "^1.6.51",
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "lowdb": "^5.0.5",
+    "mespeak": "^2.0.2",
+    "simple-trovo-api": "^1.1.10",
+    "sodium": "^3.0.2",
+    "twitch": "^4.6.7",
+    "twitch-auth": "^4.6.7"
+  }
+}

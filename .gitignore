@@ -1,0 +1,8 @@
+*.wav
+.env
+package-lock.json
+node_modules
+bot.log
+**.txt
+watcher.json
+comments.js
