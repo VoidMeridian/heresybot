@@ -22,5 +22,3 @@ NOTE: ```/edit``` does not support changing the streamer info
 A version of this bot is hosted for public use  
 
 This project is licensed under GPLv3
-
-__ignore this line__
