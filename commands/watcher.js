@@ -30,7 +30,7 @@ module.exports = {
         ),
 
     async execute(interaction) {
-        const guild = interaction.guildId;
+        const guild = interaction.guildId.toString();
         const platform = interaction.options.getString("platforms")
         const key = interaction.options.getString("channel")
         if (interaction.options.getSubcommand() === "add") {
