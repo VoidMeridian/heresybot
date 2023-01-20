@@ -19,16 +19,7 @@ NOTE: ```/edit``` does not support changing the streamer info
 
 ## Hosting
 
-A version of this bot is hosted for public use
-If you would like to host your own version you must provide api keys for all of platforms (including discord ofc)
+A version of this bot is hosted for public use  
 
+This project is licensed under GPLv3
 
-### Hosting Setup
-- .env file for credentials
-- watcher.json for storage
-- bot.log for logs
-- npm
-- node 19
-- discord token
-- trovo api id/secret pair
-- twitch api id/secret pair
