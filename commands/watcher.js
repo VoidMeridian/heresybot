@@ -48,14 +48,12 @@ module.exports = {
 
             fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher), "utf-8")
             client.timers.push(setInterval(() => {
-                getStream(key, false)
-            }, 60000))
-            console.log(JSON.stringify(client.watcher))
+                getStream(client.watcher[guild]["streamers"][key], guild)
+            }, 60000 + (240000 * Math.random())))
             interaction.reply({ content: "Success", ephemeral: true })
-        } else if (interaction.options.getSubcommand === "remove") {
+        } else if (interaction.options.getSubcommand() === "remove") {
             delete client.watcher[guild]["streamers"][key]
             fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher), "utf-8")
-            console.log(client.watcher[key])
             interaction.reply({ content: "key: " + key + " has been deleted", ephemeral: true })
         }
     }

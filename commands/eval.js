@@ -1,6 +1,14 @@
 const { SlashCommandBuilder } = require("discord.js")
 const index = require("../index")
 const fs = require("node:fs")
+
+function read() {
+    return fs.readFileSync("./bot.log", "utf-8")
+}
+
+function config() {
+    return fs.readFileSync("./watcher.json", "utf-8")
+}
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("eval")
