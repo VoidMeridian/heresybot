@@ -49,7 +49,7 @@ module.exports = {
             fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher), "utf-8")
             client.timers.push(setInterval(() => {
                 getStream(client.watcher[guild]["streamers"][key], guild)
-            }, 60000 + (240000 * Math.random())))
+            }, 60000 + (60000 * Math.random())))
             interaction.reply({ content: "Success", ephemeral: true })
         } else if (interaction.options.getSubcommand() === "remove") {
             delete client.watcher[guild]["streamers"][key]

@@ -114,7 +114,7 @@ for (const guild in client.watcher) {
 	for (const streamer in client.watcher[guild]["streamers"]) {
 		client.timers[streamer] = (setInterval(() => {
 			getStream(client.watcher[guild]["streamers"][streamer], guild)
-		}, 60000 + (240000 * Math.random())))
+		}, 60000 + (60000 * Math.random())))
 	}
 }
 client.once(Events.ClientReady, c => {
