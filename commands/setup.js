@@ -35,7 +35,7 @@ module.exports = {
             client.watcher[guild]["authRole"] = AuthRole.id.toString()
         }
 
-        fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher), "utf-8")
+        fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher, null, 4), "utf-8")
         msg.reply("Success")
     }
 }

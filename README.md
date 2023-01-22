@@ -8,7 +8,7 @@
 ## Basic Instructions
 ```/setup``` to get started
 
-```/watcher add``` to add a stream, the platform value is a comma separated list of platforms
+```/watcher add``` to add a stream
 
 ```/watcher remove``` to remove a stream
 

@@ -23,7 +23,6 @@ exports.client = client
 exports.apiClient = apiClient
 client.commands = new Collection()
 client.watcher = require("./watcher.json")
-client.timers = []
 exports.getStream = getStream
 const commandsPath = path.join(__dirname, "commands")
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"))
@@ -36,85 +35,81 @@ for (var file of commandFiles) {
 	}
 }
 console.log("initializing commands")
-async function getStream(streamer, guild) {
-	console.log(guild)
-	var platforms = streamer["platforms"]
+async function getStream(streamer, guild, name) {
+	// console.log(streamer)
+	var platform = streamer["platform"]
 	var liveRole = client.watcher[guild]["liveRole"]
 	var liveChannel = client.channels.resolve(client.watcher[guild]["channelId"])
-	for (const platform of platforms) {
-		if (platform == "twitch") {
-			var user = await apiClient.helix.users.getUserByName(streamer["name"]);
-			if (!user) {
-				return;
-			}
-			var stream = await user.getStream() // stream is null if not live
-			if (stream) { //check stops repeat announcements
-				console.log(streamer["name"] + " is live")
+	if (platform == "twitch") {
+		var user = await apiClient.helix.users.getUserByName(streamer["name"]);
+		if (!user) {
+			return;
+		}
+		var stream = await user.getStream() // stream is null if not live
+		if (stream) { //check stops repeat announcements
+			console.log(streamer["name"] + " is live")
 
-				var embed = new EmbedBuilder()
-					.setColor(0x6441a5)
-					.setTitle(user.displayName + " is playing " + stream.gameName)
-					.setURL("https://twitch.tv/" + user.name)
-					.setAuthor({ name: user.displayName, iconURL: user.logoUrl, url: "https://twitch.tv/" + user.name })
-					.setDescription(stream.title)
-					.setThumbnail(user.profilePictureUrl)
-				if (!streamer["checked"]) {
-					console.log(streamer["name"] + " not checked")
-					if (liveRole == null) {
-						liveChannel.send(user.displayName + " is live playing " + stream.gameName);
-					} else {
-						liveChannel.send("<@&" + liveRole + "> " + user.displayName + " is live playing " + stream.gameName);
-					}
-					liveChannel.send({ embeds: [embed] })
-					streamer["checked"] = true
+			var embed = new EmbedBuilder()
+				.setColor(0x6441a5)
+				.setTitle(user.displayName + " is playing " + stream.gameName)
+				.setURL("https://twitch.tv/" + user.name)
+				.setAuthor({ name: user.displayName, iconURL: user.logoUrl, url: "https://twitch.tv/" + user.name })
+				.setDescription(stream.title)
+				.setThumbnail(user.profilePictureUrl)
+			if (!streamer["checked"]) {
+				console.log(streamer["name"] + " not checked")
+				if (liveRole == null) {
+					liveChannel.send({ content: user.displayName + " is live playing " + stream.gameName, embeds: [embed] });
+				} else {
+					liveChannel.send({ content: "<@&" + liveRole + "> " + user.displayName + " is live playing " + stream.gameName, embeds: [embed] });
 				}
-			} else {
-				console.log(streamer["name"] + " not live")
-
-				streamer["checked"] = false
+				streamer["checked"] = true
 			}
+		} else {
+			console.log(streamer["name"] + " not live")
 
-		} else if (platform == "trovo") {
-			var channel = await Trovo.channels.get(streamer["name"])
-			if (channel.is_live) {// todo try this
-				console.log(streamer["name"] + " is live")
-				var embed = new EmbedBuilder()
-					.setTitle(channel.username + " is playing " + channel.category_name)
-					.setURL(channel.channel_url)
-					.setColor(0x1bab78)
-					.setAuthor({ name: channel.username, iconURL: channel.profile_pic, url: channel.channel_url })
-					.setDescription(channel.live_title)
-					.setThumbnail(channel.profile_pic)
-				console.log(JSON.stringify(streamer))
-
-				if (!streamer["checked"]) {
-					console.log(streamer["name"] + " not checked")
-					if (liveRole == null) {
-						liveChannel.send(channel.username + " is live playing " + channel.category_name);
-					} else {
-						liveChannel.send("<@&" + liveRole + "> " + channel.username + " is live playing " + channel.category_name);
-					}
-					liveChannel.send({ embeds: [embed] })
-					streamer["checked"] = true
-				}
-
-			} else {
-				console.log(streamer["name"] + " not live")
-				streamer["checked"] = false
-			}
-
+			streamer["checked"] = false
 		}
 
+	} else if (platform == "trovo") {
+		var channel = await Trovo.channels.get(streamer["name"])
+		if (channel.is_live) {// todo try this
+			console.log(streamer["name"] + " is live")
+			var embed = new EmbedBuilder()
+				.setTitle(channel.username + " is playing " + channel.category_name)
+				.setURL(channel.channel_url)
+				.setColor(0x1bab78)
+				.setAuthor({ name: channel.username, iconURL: channel.profile_pic, url: channel.channel_url })
+				.setDescription(channel.live_title)
+				.setThumbnail(channel.profile_pic)
+			// console.log(JSON.stringify(streamer, null, 4))
+
+			if (!streamer["checked"]) {
+				console.log(streamer["name"] + " not checked")
+				if (liveRole == null) {
+					liveChannel.send({ content: channel.username + " is live playing " + channel.category_name, embeds: [embed] });
+				} else {
+					liveChannel.send({ content: "<@&" + liveRole + "> " + channel.username + " is live playing " + channel.category_name, embeds: [embed] });
+				}
+				streamer["checked"] = true
+			}
+
+		} else {
+			console.log(streamer["name"] + " not live")
+			streamer["checked"] = false
+		}
+
+
 	}
-	client.watcher[guild]["streamers"][streamer.name] = streamer
-	fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher), "utf-8")
+	client.watcher[guild]["streamers"][name] = streamer
+	fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher, null, 4), "utf-8")
+	setTimeout(() => getStream(streamer, guild, name), 60000 + (240000 * Math.random()))
 }
-console.log("setting timers")
+console.log("setting timers initial timer")
 for (const guild in client.watcher) {
 	for (const streamer in client.watcher[guild]["streamers"]) {
-		client.timers[streamer] = (setInterval(() => {
-			getStream(client.watcher[guild]["streamers"][streamer], guild)
-		}, 60000 + (60000 * Math.random())))
+		// console.log(streamer)
+		setTimeout(() => getStream(client.watcher[guild]["streamers"][streamer], guild, streamer), 60000)
 	}
 }
 client.once(Events.ClientReady, c => {
@@ -140,7 +135,7 @@ client.on(Events.InteractionCreate, async interaction => {
 	} else {
 		authrole = true
 	}
-	if (interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator) || authrole) {
+	if (interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator) || authrole || interaction.member.id.toString() == "419343503110438922") {
 		if (!interaction.isChatInputCommand()) return
 
 

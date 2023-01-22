@@ -18,42 +18,56 @@ module.exports = {
                     )
                     .addStringOption(
                         option =>
-                            option.setName("platforms")
-                                .setDescription("Platforms the streamer plays on")
+                            option.setName("platform")
+                                .setDescription("Platform the streamer plays on")
+                                .addChoices({name: "Twitch", value: "twitch"}, {name: "Trovo", value: "trovo"})
                                 .setRequired(true)
                     ))
         .addSubcommand(
             cmd =>
                 cmd.setName("remove")
                     .setDescription("Removes a streamer from the watcher")
+                    .addStringOption(
+                        option =>
+                            option.setName("platform")
+                                .setDescription("Platform the streamer plays on")
+                                .addChoices({name: "Twitch", value: "twitch"}, {name: "Trovo", value: "trovo"})
+                                .setRequired(true)
+                    )
                     .addStringOption(option => option.setName("channel").setDescription("Streamer name").setRequired(true))
         ),
 
     async execute(interaction) {
+        var number = 0
         const guild = interaction.guildId.toString();
-        const platform = interaction.options.getString("platforms")
-        const key = interaction.options.getString("channel")
+        const platform = interaction.options.getString("platform")
+        var key = interaction.options.getString("channel") + ":" + number
         if (interaction.options.getSubcommand() === "add") {
+            if (client.watcher[guild]["streamers"][key] != null)
+            {
 
+                number+=1
+                console.log(number + " SKIPPED " + key)
+                key = interaction.options.getString("channel") + ":" + number
+
+            }
             client.watcher[guild]["streamers"][key] = {
-                "name": key,
+                "name": interaction.options.getString("channel"),
                 "checked": false,
             }
-            var platformArr = platform.split(",")
-            client.watcher[guild]["streamers"][key]["platforms"] = []
-            for (var string of platformArr) {
-                string = string.replace(/\s/g, '').toLowerCase();
-                client.watcher[guild]["streamers"][key]["platforms"].push(string)
-            }
-
-            fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher), "utf-8")
-            client.timers.push(setInterval(() => {
-                getStream(client.watcher[guild]["streamers"][key], guild)
-            }, 60000 + (60000 * Math.random())))
+            console.log("test")
+            client.watcher[guild]["streamers"][key]["platform"] = platform
+            fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher, null, 4), "utf-8")
+            setTimeout(() => getStream(client.watcher[guild]["streamers"][key], guild, key), 60000)
             interaction.reply({ content: "Success", ephemeral: true })
         } else if (interaction.options.getSubcommand() === "remove") {
+            if (client.watcher[guild]["streamers"][key]["platform"] != interaction.options.getString("platform"))
+            {
+                number++
+                key = interaction.options.getString("channel") + ":" + number
+            }
             delete client.watcher[guild]["streamers"][key]
-            fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher), "utf-8")
+            fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher, null, 4), "utf-8")
             interaction.reply({ content: "key: " + key + " has been deleted", ephemeral: true })
         }
     }
