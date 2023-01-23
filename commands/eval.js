@@ -2,6 +2,10 @@ const { SlashCommandBuilder } = require("discord.js")
 const index = require("../index")
 const fs = require("node:fs")
 
+function version() {
+    return "1.0.1"
+}
+
 function read() {
     return fs.readFileSync("./bot.log", "utf-8")
 }
