@@ -1,9 +1,14 @@
 const { SlashCommandBuilder } = require("discord.js")
 const index = require("../index")
 const fs = require("node:fs")
+const { exec } = require("node:child_process")
 
 function version() {
     return "1.0.1"
+}
+
+function off() {
+    return exec("pm2 stop index")
 }
 
 function read() {
