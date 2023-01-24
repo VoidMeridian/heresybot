@@ -1,6 +1,6 @@
 const fs = require("node:fs")
-var access = fs.createWriteStream('./bot.log', 'utf-8');
-process.stdout.write = process.stderr.write = access.write.bind(access);
+// var access = fs.createWriteStream('./bot.log', 'utf-8');
+// process.stdout.write = process.stderr.write = access.write.bind(access);
 console.log("configuring output file")
 const path = require("node:path")
 const { Client, Events, GatewayIntentBits, Collection, EmbedBuilder, PermissionsBitField } = require("discord.js")
