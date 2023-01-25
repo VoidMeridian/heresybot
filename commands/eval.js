@@ -4,7 +4,7 @@ const fs = require("node:fs")
 const { exec } = require("node:child_process")
 
 function version() {
-    return "1.0.1"
+    return "1.0.2"
 }
 
 function off() {
