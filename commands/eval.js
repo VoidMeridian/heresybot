@@ -1,18 +1,20 @@
 const { SlashCommandBuilder } = require("discord.js")
 const index = require("../index")
 const fs = require("node:fs")
-const { exec } = require("node:child_process")
+const path = require("node:path")
+const { exec, execSync } = require("node:child_process")
+const homedir = require('os').homedir();
 
 function version() {
     return "1.0.2"
 }
 
 function off() {
-    return exec("pm2 stop index")
+    return execSync("pm2 list")
 }
 
 function read() {
-    return fs.readFileSync("./bot.log", "utf-8")
+    return fs.readFileSync(path.join(homedir, ".pm2", "logs", "Heresy-out.log"), "utf-8");
 }
 
 function config() {
@@ -29,7 +31,7 @@ module.exports = {
             msg.reply("You're not allowed")
         } else {
             var cmd = msg.options.getString("cmd")
-            msg.reply({ content: "result: " + eval(cmd), ephemeral: true })
+            msg.reply({ content: "result: " + eval(cmd).toString().slice(-1500), ephemeral: true })
         }
     }
 
