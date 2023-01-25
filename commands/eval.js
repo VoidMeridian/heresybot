@@ -10,7 +10,7 @@ function version() {
 }
 
 function off() {
-    return execSync("pm2 list")
+    return execSync("pm2 stop Heresy")
 }
 
 function read() {
