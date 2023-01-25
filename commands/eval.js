@@ -6,7 +6,7 @@ const { exec, execSync } = require("node:child_process")
 const homedir = require('os').homedir();
 
 function version() {
-    return "1.0.2"
+    return "1.1.0"
 }
 
 function off() {
