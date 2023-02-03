@@ -43,7 +43,16 @@ module.exports = {
         const platform = interaction.options.getString("platform")
         var key = interaction.options.getString("channel") + ":" + number
         if (interaction.options.getSubcommand() === "add") {
-            if (client.watcher[guild]["streamers"][key] != null)
+            if (client.watcher["streamers"][key] == null) {
+                client.watcher["streamers"][key] = {
+                    "name": interaction.options.getString("channel"),
+                    "platform": platform,
+                    "guilds": [],
+                    "cached": false,
+                }
+            setTimeout(() => getStream(key), 60000)
+
+            } else if (client.watcher["streamers"][key]["platform"] != platform)
             {
 
                 number+=1
@@ -51,22 +60,21 @@ module.exports = {
                 key = interaction.options.getString("channel") + ":" + number
 
             }
-            client.watcher[guild]["streamers"][key] = {
-                "name": interaction.options.getString("channel"),
-                "checked": false,
-            }
-            console.log("test")
-            client.watcher[guild]["streamers"][key]["platform"] = platform
+            client.watcher["streamers"][key]["guilds"].push(guild)
             fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher, null, 4), "utf-8")
-            setTimeout(() => getStream(client.watcher[guild]["streamers"][key], guild, key), 60000)
             interaction.reply({ content: "Success", ephemeral: true })
         } else if (interaction.options.getSubcommand() === "remove") {
-            if (client.watcher[guild]["streamers"][key]["platform"] != interaction.options.getString("platform"))
+            if (client.watcher["streamers"][key]["platform"] != interaction.options.getString("platform"))
             {
                 number++
                 key = interaction.options.getString("channel") + ":" + number
             }
-            delete client.watcher[guild]["streamers"][key]
+            client.watcher["streamers"][key]["guilds"] = client.watcher["streamers"][key]["guilds"].filter((value, _t, _i) => {
+                return value != guild
+            })
+            if (client.watcher["streamers"][key]["guilds"].length == 0) {
+                delete client.watcher["streamers"][key]
+            }
             fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher, null, 4), "utf-8")
             interaction.reply({ content: "key: " + key + " has been deleted", ephemeral: true })
         }

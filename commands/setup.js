@@ -24,10 +24,8 @@ module.exports = {
         const channel = msg.options.getChannel("channel")
         const liveRole = msg.options.getRole("live_role", false)
         const AuthRole = msg.options.getRole("authorized_role", false)
-        client.watcher[guild] = {
-            "channelId": channel.id.toString(),
-            "streamers": {}
-        }
+        client.watcher[guild] = {}
+        client.watcher[guild]["channelId"] = channel.id.toString()
         if (liveRole !== null) {
             client.watcher[guild]["liveRole"] = liveRole.id.toString()
         }

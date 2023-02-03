@@ -35,11 +35,11 @@ for (var file of commandFiles) {
 	}
 }
 console.log("initializing commands")
-async function getStream(streamer, guild, name) {
+async function getStream(key) {
 	// console.log(streamer)
+	if (client.watcher["streamers"][key] == null) return
+	var streamer = client.watcher["streamers"][key]
 	var platform = streamer["platform"]
-	var liveRole = client.watcher[guild]["liveRole"]
-	var liveChannel = client.channels.resolve(client.watcher[guild]["channelId"])
 	if (platform == "twitch") {
 		var user = await apiClient.helix.users.getUserByName(streamer["name"]);
 		if (!user) {
@@ -56,19 +56,26 @@ async function getStream(streamer, guild, name) {
 				.setAuthor({ name: user.displayName, iconURL: user.logoUrl, url: "https://twitch.tv/" + user.name })
 				.setDescription(stream.title)
 				.setThumbnail(user.profilePictureUrl)
-			if (!streamer["checked"]) {
+			if (!streamer["cached"]) {
 				console.log(streamer["name"] + " not checked")
-				if (liveRole == null) {
-					liveChannel.send({ content: user.displayName + " is live playing " + stream.gameName, embeds: [embed] });
-				} else {
-					liveChannel.send({ content: "<@&" + liveRole + "> " + user.displayName + " is live playing " + stream.gameName, embeds: [embed] });
+				for (const i in streamer["guilds"]) {
+					var guildId = streamer["guilds"][i]
+					var guildInfo = client.watcher[guildId]
+					var liveChannel = client.channels.resolve(guildInfo["channelId"])
+					var liveRole = guildInfo["liveRole"]
+					if (liveRole == null) {
+						liveChannel.send({ content: user.displayName + " is live playing " + stream.gameName, embeds: [embed] });
+					} else {
+						liveChannel.send({ content: "<@&" + liveRole + "> " + user.displayName + " is live playing " + stream.gameName, embeds: [embed] });
+					}
 				}
-				streamer["checked"] = true
+
+				streamer["cached"] = true
 			}
 		} else {
 			console.log(streamer["name"] + " not live")
 
-			streamer["checked"] = false
+			streamer["cached"] = false
 		}
 
 	} else if (platform == "trovo") {
@@ -84,33 +91,38 @@ async function getStream(streamer, guild, name) {
 				.setThumbnail(channel.profile_pic)
 			// console.log(JSON.stringify(streamer, null, 4))
 
-			if (!streamer["checked"]) {
+			if (!streamer["cached"]) {
 				console.log(streamer["name"] + " not checked")
-				if (liveRole == null) {
-					liveChannel.send({ content: channel.username + " is live playing " + channel.category_name, embeds: [embed] });
-				} else {
-					liveChannel.send({ content: "<@&" + liveRole + "> " + channel.username + " is live playing " + channel.category_name, embeds: [embed] });
+				for (const i in streamer["guilds"]) {
+					var guildId = streamer["guilds"][i]
+					var guildInfo = client.watcher[guildId]
+					var liveChannel = client.channels.resolve(guildInfo["channelId"])
+					var liveRole = guildInfo["liveRole"]
+
+					if (liveRole == null) {
+						liveChannel.send({ content: channel.username + " is live playing " + channel.category_name, embeds: [embed] });
+					} else {
+						liveChannel.send({ content: "<@&" + liveRole + "> " + channel.username + " is live playing " + channel.category_name, embeds: [embed] });
+					}
 				}
-				streamer["checked"] = true
+				streamer["cached"] = true
 			}
 
 		} else {
 			console.log(streamer["name"] + " not live")
-			streamer["checked"] = false
+			streamer["cached"] = false
 		}
 
 
 	}
-	client.watcher[guild]["streamers"][name] = streamer
+	client.watcher["streamers"][key]["cached"] = streamer["cached"]
 	fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher, null, 4), "utf-8")
-	setTimeout(() => getStream(streamer, guild, name), 60000 + (240000 * Math.random()))
+	setTimeout(() => getStream(key), 60000 + (240000 * Math.random()))
 }
 console.log("setting timers initial timer")
-for (const guild in client.watcher) {
-	for (const streamer in client.watcher[guild]["streamers"]) {
-		// console.log(streamer)
-		setTimeout(() => getStream(client.watcher[guild]["streamers"][streamer], guild, streamer), 60000)
-	}
+for (const streamer in client.watcher["streamers"]) {
+	// console.log(streamer)
+	setTimeout(() => getStream(streamer), 60000)
 }
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`)

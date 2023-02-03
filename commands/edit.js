@@ -30,7 +30,7 @@ module.exports = {
             client.watcher[guild]["authRole"] = AuthRole.id.toString()
         }
         if (channel !== null) {
-            client.watcher[guild]["channelId"] = channel.id.toString
+            client.watcher[guild]["channelId"] = channel.id.toString()
         }
 
         fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher, null, 4), "utf-8")
