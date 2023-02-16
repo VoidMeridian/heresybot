@@ -1,3 +1,3 @@
 #!/bin/bash
 echo "Started at $(date +%D)"
-git pull && node index.js
+git pull origin master && node index.js
