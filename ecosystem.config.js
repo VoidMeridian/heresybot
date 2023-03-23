@@ -1,6 +1,6 @@
 module.exports = {
-    apps : [{
-        name   : "Heresy",
-        script : "./startup.sh"
-    }]
+	apps : [{
+		name : "Heresy",
+		script : "./startup.sh"
+	}]
 }
