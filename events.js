@@ -1,4 +1,6 @@
 const { client } = require("./index")
+const { Events,  PermissionsBitField } = require("discord.js")
+
 const { exec } = require("node:child_process")
 
 client.once(Events.ClientReady, c => {

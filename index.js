@@ -3,7 +3,7 @@ const fs = require("node:fs")
 // process.stdout.write = process.stderr.write = access.write.bind(access);
 console.log("configuring output file")
 const path = require("node:path")
-const { Client, Events, GatewayIntentBits, Collection, EmbedBuilder, PermissionsBitField } = require("discord.js")
+const { Client, GatewayIntentBits, Collection, EmbedBuilder } = require("discord.js")
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates] })
 const dotenv = require("dotenv")
 dotenv.config()
