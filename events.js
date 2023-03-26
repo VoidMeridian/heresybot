@@ -50,24 +50,24 @@ client.on(Events.InteractionCreate, async interaction => {
 	}
 })
 
-client.on(Events.debug, async string => {
+client.on(Events.Debug, async string => {
     console.log("DEBUG: " + string)
 })
 
-client.on(Events.error, async error => {
+client.on(Events.Error, async error => {
     console.log("ERROR: " + error.name + " " + error.message + " caused by " + error.cause)
 })
 
-client.on(Events.warn, async string => {
+client.on(Events.Warn, async string => {
     console.log("WARN: " + string)
 })
 
-client.on(Events.invalidated, async () => {
+client.on(Events.Invalidated, async () => {
     console.log("Fatal error has occurred");
     exec("pm2 stop Heresy");
 })
 
-client.on(Events.messageCreate, async msg => {
+client.on(Events.MessageCreate, async msg => {
     if (msg.author.id === "419343503110438922" && msg.channelId === "1089347772324520046") {
 		msg.reply("Hello mother");
 	}
