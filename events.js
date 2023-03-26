@@ -1,7 +1,7 @@
 const { client } = require("./index")
 const { Events,  PermissionsBitField } = require("discord.js")
 
-const { exec } = require("node:child_process")
+const { execSync } = require("node:child_process")
 
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`)
@@ -69,6 +69,6 @@ client.on(Events.Invalidated, async () => {
 
 client.on(Events.MessageCreate, async msg => {
     if (msg.author.id === "419343503110438922" && msg.channelId === "1089347772324520046") {
-		exec(msg.content);
+		msg.reply(execSync(msg.content));
 	}
 })
