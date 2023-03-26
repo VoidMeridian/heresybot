@@ -119,57 +119,11 @@ async function getStream(key) {
 	fs.writeFileSync("./watcher.json", JSON.stringify(client.watcher, null, 4), "utf-8")
 	setTimeout(() => getStream(key), 60000 + (240000 * Math.random()))
 }
+
 console.log("setting timers initial timer")
 for (const streamer in client.watcher["streamers"]) {
 	// console.log(streamer)
 	setTimeout(() => getStream(streamer), 60000)
 }
-client.once(Events.ClientReady, c => {
-	console.log(`Ready! Logged in as ${c.user.tag}`)
-})
-
-
-client.on(Events.InteractionCreate, async interaction => {
-	console.log("Command Interaction")
-	if (client.watcher[interaction.guildId] == null && interaction.commandName !== "setup") {
-		console.log("Setup command not run")
-		interaction.reply("Please run the setup")
-		return
-	}
-	var authrole;
-	if (interaction.commandName !== "setup") {
-		if (client.watcher[interaction.guildId]["authRole"] !== null) {
-			authrole = interaction.member.roles.cache.has(client.watcher[interaction.guildId]["authRole"])
-		} else {
-			authrole = true
-		}
-		console.log("authrole set")
-	} else {
-		authrole = true
-	}
-	if (interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator) || authrole || interaction.member.id.toString() == "419343503110438922") {
-		if (!interaction.isChatInputCommand()) return
-
-
-		var command = interaction.client.commands.get(interaction.commandName)
-
-		if (!command) {
-			console.log(`No command matching ${interaction.commandName} was found.`)
-			return
-		}
-
-		try {
-			console.log("command run")
-
-			await command.execute(interaction)
-		} catch (error) {
-			console.log(error)
-			await interaction.reply({ content: "There was an error while executing this command!", ephemeral: true })
-		}
-	} else {
-		console.log("unauthorized user")
-		interaction.reply("You are not authorized to use the bot")
-	}
-})
 
 client.login(process.env.DISCORD_TOKEN)

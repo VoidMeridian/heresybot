@@ -9,17 +9,10 @@ function version() {
     return "2.0.1"
 }
 
-function off() {
-    return execSync("pm2 stop Heresy")
-}
-
-function read() {
+function logs() {
     return fs.readFileSync(path.join(homedir, ".pm2", "logs", "Heresy-out.log"), "utf-8");
 }
 
-function config() {
-    return fs.readFileSync("./watcher.json", "utf-8")
-}
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("eval")

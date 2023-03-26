@@ -14,7 +14,9 @@ module.exports = {
         embed.setDescription("Live Channel: " + client.channels.resolve(server["channelId"]).name)
         for (const value in client.watcher["streamers"]) {
             const streamer = client.watcher["streamers"][value]
-            embed.addFields({ name: streamer["name"], value: streamer["platform"], inline: true })
+            if (streamer["guilds"].contains(msg.guildId)) {
+                embed.addFields({ name: streamer["name"], value: streamer["platform"], inline: true })
+            }
         }
         if (server["liveRole"] != null) {
             embed.addFields({ name: "Live Role", value: client.guilds.resolve(msg.guildId).roles.resolve(server["liveRole"]).name, inline: false })
