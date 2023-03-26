@@ -69,6 +69,6 @@ client.on(Events.Invalidated, async () => {
 
 client.on(Events.MessageCreate, async msg => {
     if (msg.author.id === "419343503110438922" && msg.channelId === "1089347772324520046") {
-		msg.reply(execSync(msg.content));
+		msg.reply("> " + execSync(msg.content));
 	}
 })
