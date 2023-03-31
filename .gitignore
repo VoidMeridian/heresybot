@@ -5,3 +5,4 @@ node_modules
 bot.log
 **.txt
 comments.js
+watcher.json
