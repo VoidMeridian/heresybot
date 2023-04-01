@@ -97,14 +97,14 @@ async function getStream(key) {
 					var guildId = streamer["guilds"][i]
 					var guildInfo = client.watcher[guildId]
 					var liveChannel = client.channels.resolve(guildInfo["channelId"])
-					if (streamer["name"] === "5parr0vv") {
-						if (guildId === "693270836764737576") {
-							var temp = client.guilds.resolve(guildId).resolve("1042528975362215946")
-							if (temp != undefined && temp != null) {
-								liveChannel = temp;
-							}
-						}
-					}
+					// if (streamer["name"] === "5parr0vv") {
+					// 	if (guildId === "693270836764737576") {
+					// 		var temp = client.guilds.resolve(guildId).resolve("1042528975362215946")
+					// 		if (temp != undefined && temp != null) {
+					// 			liveChannel = temp;
+					// 		}
+					// 	}
+					// }
 					var liveRole = guildInfo["liveRole"]
 
 					if (liveRole == null) {
