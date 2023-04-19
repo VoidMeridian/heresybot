@@ -19,7 +19,7 @@ module.exports = {
         .setDescription("Developer only")
         .addStringOption(option => option.setName("cmd").setDescription("Command to evaluate")),
     async execute(msg) {
-        if (msg.user.id.toString() != "419343503110438922") {
+        if (msg.user.id != "419343503110438922" && msg.user.id != "538043155480576050") {
             index.client.users.cache.get("419343503110438922").send("<@!419343503110438922> " + msg.user.username + " tried accessing eval")
             msg.reply("You're not allowed")
         } else {

